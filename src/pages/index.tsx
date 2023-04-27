@@ -1,9 +1,9 @@
-import React from "react";
+import React, { Fragment } from "react";
 import type { NextPage } from "next";
 
 interface HomeProps {}
 
 const Home: NextPage<HomeProps> = () => {
-	return <div>Have a good coding</div>;
+	return <Fragment></Fragment>;
 };
 export default Home;

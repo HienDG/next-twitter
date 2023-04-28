@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Button } from "@src/components/ui";
+
 import { useAuthModal } from "@src/hooks";
 
 const RightContent: React.FC = () => {
@@ -10,18 +12,21 @@ const RightContent: React.FC = () => {
 			<div className="p-4 border border-gray-700 border-solid rounded-xl">
 				<h2 className="text-xl font-bold text-center mb-7">Welcome to Twitter</h2>
 				<div className="flex flex-col px-2 mb-4 space-y-5">
-					<button
-						className="text-lg capitalize rounded-full btn btn-primary"
+					<Button
+						className="text-lg text-white capitalize rounded-full"
+						outline
 						onClick={() => onOpen()}
 					>
 						Login
-					</button>
-					<button
-						className="text-lg capitalize rounded-full btn btn-outline btn-primary"
+					</Button>
+
+					<Button
+						className="text-lg capitalize rounded-full"
+						variant="primary"
 						onClick={() => onOpen("sign-up")}
 					>
 						Create New Account
-					</button>
+					</Button>
 				</div>
 			</div>
 		</aside>

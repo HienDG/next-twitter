@@ -6,7 +6,7 @@ interface FormControlProps extends React.FormHTMLAttributes<HTMLFormElement> {
 }
 
 const FormControl: React.FC<FormControlProps> = ({ className, children, ...restProps }) => {
-	const formClasses = clsx("w-full space-y-6", className);
+	const formClasses = clsx("w-full space-y-5", className);
 
 	return (
 		<form className={formClasses} {...restProps}>

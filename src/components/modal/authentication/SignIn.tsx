@@ -2,12 +2,16 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { FormControl, InputField } from "@src/components/ui";
+import { FormControl, InputField, Button } from "@src/components/ui";
 
 import { signInSchema, type SignInFormFields, defaultSignInField } from "@libs/zod";
 
 const SignInModal: React.FC = () => {
-	const { register, handleSubmit } = useForm<SignInFormFields>({
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<SignInFormFields>({
 		resolver: zodResolver(signInSchema),
 		defaultValues: defaultSignInField,
 		mode: "onChange",
@@ -19,10 +23,25 @@ const SignInModal: React.FC = () => {
 
 	return (
 		<FormControl onSubmit={handleSubmit(onSubmit)}>
-			<InputField label="Email" {...register("email")} />
-			<InputField label="Password" {...register("password")} />
+			<InputField
+				type="email"
+				placeholder="Enter your Email"
+				hasError={!!errors.email}
+				errorMessage={errors.email?.message}
+				{...register("email")}
+			/>
 
-			<button className="w-full text-lg capitalize btn btn-primary rounded-xl">Sign Up</button>
+			<InputField
+				type="password"
+				placeholder="Enter your Password"
+				errorMessage={errors.password?.message}
+				hasError={!!errors.password}
+				{...register("password")}
+			/>
+
+			<Button className="w-full text-white capitalize rounded-full" variant="primary" type="submit">
+				Sign In
+			</Button>
 		</FormControl>
 	);
 };

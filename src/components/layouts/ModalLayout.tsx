@@ -10,24 +10,24 @@ interface ModalLayoutProps {
 
 const ModalLayout: React.FC<ModalLayoutProps> = ({ label, children, onClose }) => {
 	return (
-		<section className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none bg-neutral-800 bg-opacity-70 scrollbar-hide">
+		<section className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none bg-neutral-800 bg-opacity-70 scrollbar-hide max-md:bg-black">
 			<div className="relative w-full h-full mx-auto my-6 md:w-3/5 lg:w-2/5 lg:max-w-3xl md:h-auto">
 				{/* Content */}
 				<div className="relative flex flex-col w-full h-full bg-black border-0 rounded-lg shadow-lg outline-none lg:h-auto focus:outline-none">
 					{/* Header */}
-					<div className="flex items-center justify-between p-10 rounded-t ">
-						<h3 className="text-3xl font-semibold text-white">{label}</h3>
+					<div className="flex items-center justify-between p-10 pb-5 rounded-t ">
+						<h3 className="flex-1 text-3xl font-semibold text-center text-white">{label}</h3>
 
 						<button
-							className="p-1 ml-auto text-white transition border-0 hover:opacity-70"
+							className="p-1 text-white transition border-0 hover:opacity-70"
 							onClick={onClose}
 						>
-							<AiOutlineClose size={20} />
+							<AiOutlineClose size={24} />
 						</button>
 					</div>
 
 					{/* Body */}
-					<div className="relative flex-auto p-10">
+					<div className="relative flex-auto w-4/5 p-10 mx-auto max-sm:w-full">
 						{children && Array.isArray(children) ? children[0 as keyof typeof children] : children}
 					</div>
 

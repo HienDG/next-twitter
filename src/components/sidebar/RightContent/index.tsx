@@ -2,9 +2,7 @@ import React from "react";
 
 import { useAuthModal } from "@src/hooks";
 
-interface RightContentProps {}
-
-const RightContent: React.FC<RightContentProps> = () => {
+const RightContent: React.FC = () => {
 	const { onOpen } = useAuthModal();
 
 	return (

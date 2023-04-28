@@ -6,9 +6,7 @@ import { FormControl, InputField } from "@src/components/ui";
 
 import { signUpSchema, type SignUpFormFields, defaultSignUpField } from "@libs/zod";
 
-interface SignUpModalProps {}
-
-const SignUpModal: React.FC<SignUpModalProps> = () => {
+const SignUpModal: React.FC = () => {
 	const { register, handleSubmit } = useForm<SignUpFormFields>({
 		resolver: zodResolver(signUpSchema),
 		defaultValues: defaultSignUpField,

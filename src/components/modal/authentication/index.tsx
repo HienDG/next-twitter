@@ -6,9 +6,7 @@ import SignInModal from "./SignIn";
 
 import { useAuthModal } from "@src/hooks";
 
-interface AuthenticationModalProps {}
-
-const AuthenticationModal: React.FC<AuthenticationModalProps> = () => {
+const AuthenticationModal: React.FC = () => {
 	const { onClose, view, onChangeModalView } = useAuthModal();
 
 	return (

@@ -1,24 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 
 import { FormControl, InputField, Button } from "@src/components/ui";
 
 import { signInSchema, type SignInFormFields, defaultSignInField } from "@libs/zod";
 
 const SignInModal: React.FC = () => {
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
+		reset,
 	} = useForm<SignInFormFields>({
 		resolver: zodResolver(signInSchema),
 		defaultValues: defaultSignInField,
 		mode: "onChange",
 	});
 
-	const onSubmit: SubmitHandler<SignInFormFields> = ({ email, password }) => {
-		console.log(email, password);
+	const onSubmit: SubmitHandler<SignInFormFields> = async ({ email, password }) => {
+		setIsLoading(true);
+		try {
+			await signIn("credentials", {
+				email,
+				password,
+			});
+
+			toast.success("Logged Successful");
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				console.log(error.message);
+			}
+			toast.error("Something went wrong");
+		}
+
+		setIsLoading(false);
+		reset();
 	};
 
 	return (

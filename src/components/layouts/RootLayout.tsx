@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Toaster } from "react-hot-toast";
-import { SessionProvider } from "next-auth/react";
 import type { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
 
 import Meta from "@src/components/meta";
 import { AuthenticationModal } from "@src/components/modal";

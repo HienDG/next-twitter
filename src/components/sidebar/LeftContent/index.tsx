@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
+import { signOut } from "next-auth/react";
 
 import { BiLogOut } from "react-icons/bi";
 import { BsHouseFill, BsBellFill } from "react-icons/bs";
@@ -32,7 +33,7 @@ const LeftContent: React.FC = () => {
 
 						<MenuItem icon={FaUser} label="Profile" onClick={() => router.push("/users/id")} />
 
-						<MenuItem icon={BiLogOut} label="Log out" />
+						<MenuItem icon={BiLogOut} label="Log out" onClick={() => signOut()} />
 					</Menu>
 
 					{/* Tweet button */}

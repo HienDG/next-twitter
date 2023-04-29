@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
 import prisma from "@libs/prisma";
+import { signToken } from "@helper/api";
 
 export const authOptions: AuthOptions = {
 	adapter: PrismaAdapter(prisma),
@@ -30,18 +31,42 @@ export const authOptions: AuthOptions = {
 
 				if (!isCorrectPassword) throw new Error("Invalid credentials");
 
-				return user;
+				return {
+					...user,
+					name: user.username,
+				};
 			},
 		}),
 	],
 	debug: process.env.NODE_ENV === "development",
 	session: {
 		strategy: "jwt",
+		maxAge: 24 * 60 * 60, // 1 day
 	},
 	jwt: {
 		secret: process.env["NEXTAUTH_JWT_SECRET"] as string,
 	},
 	secret: process.env["NEXTAUTH_SECRET"] as string,
+
+	callbacks: {
+		async jwt({ token, user, account }) {
+			console.log(account);
+
+			if (user && account) {
+				token.id = user.id;
+				token.accessToken = signToken(user.id);
+				token.name = user.name;
+			}
+			return token;
+		},
+		async session({ token, session }) {
+			if (token) {
+				session.user.id = token.id;
+				session.user.accessToken = token.accessToken;
+			}
+			return session;
+		},
+	},
 };
 
 export default NextAuth(authOptions);

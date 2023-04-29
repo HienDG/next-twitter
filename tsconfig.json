@@ -19,7 +19,8 @@
 		"noPropertyAccessFromIndexSignature": true,
 		"paths": {
 			"@src/*": ["./src/*"],
-			"@libs/*": ["./src/libs/*"]
+			"@libs/*": ["./src/libs/*"],
+			"@helper/*": ["./src/helper/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

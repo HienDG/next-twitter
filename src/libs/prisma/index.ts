@@ -13,7 +13,6 @@ interface CustomNodeJSGlobal extends NodeJS.Global {
 }
 
 // Prevent multiple instances of Prisma Client in development
-
 declare const global: CustomNodeJSGlobal;
 
 const prisma = global.prisma || new PrismaClient();

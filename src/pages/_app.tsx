@@ -5,9 +5,9 @@ import { RootLayout, MainContentLayout } from "@src/components/layouts";
 
 import "@src/styles/globals.css";
 
-const App: NextPage<AppProps> = ({ Component, pageProps }) => {
+const App: NextPage<AppProps> = ({ Component, pageProps: { session, ...pageProps } }) => {
 	return (
-		<RootLayout>
+		<RootLayout session={session}>
 			<MainContentLayout>
 				<Component {...pageProps} />
 			</MainContentLayout>

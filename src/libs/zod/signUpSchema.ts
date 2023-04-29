@@ -5,7 +5,7 @@ const signUpSchema = z
 		username: z
 			.string()
 			.min(1, { message: "This field has to be filled." })
-			.max(12, "Username cannot exceed more than 12 characters"),
+			.max(30, "Username cannot exceed more than 30 characters"),
 		email: z
 			.string()
 			.min(1, { message: "This field has to be filled." })
@@ -17,7 +17,7 @@ const signUpSchema = z
 		confirmPassword: z
 			.string()
 			.min(4, { message: "Confirm password length should be at least 4 characters" })
-			.max(14, "Confirm password cannot exceed more than 24 characters"),
+			.max(24, "Confirm password cannot exceed more than 24 characters"),
 	})
 	.required()
 	.superRefine(({ password, confirmPassword }, ctx) => {

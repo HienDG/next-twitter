@@ -1,5 +1,4 @@
-import React from "react";
-import { useRouter } from "next/router";
+import React, { Fragment } from "react";
 import { signOut } from "next-auth/react";
 
 import { BiLogOut } from "react-icons/bi";
@@ -11,8 +10,10 @@ import Menu from "./Menu";
 import MenuItem from "./MenuItem";
 import TweetButton from "./TweetButton";
 
+import { useUser } from "@src/hooks";
+
 const LeftContent: React.FC = () => {
-	const router = useRouter();
+	const { loggedInUser } = useUser();
 
 	return (
 		<aside className="h-full col-span-1 pr-4 md:pr-6">
@@ -21,24 +22,34 @@ const LeftContent: React.FC = () => {
 					{/* Logo */}
 					<Logo />
 
-					{/* Navigation */}
+					{/*  Menu */}
 					<Menu>
-						<MenuItem icon={BsHouseFill} label="Home" onClick={() => router.push("/")} />
+						<MenuItem icon={BsHouseFill} label="Home" href="/" />
 
 						<MenuItem
 							icon={BsBellFill}
 							label="Notifications"
-							onClick={() => router.push("/notifications")}
+							href="/notifications"
+							alert={loggedInUser?.hasNotification}
+							isProtected
 						/>
 
-						<MenuItem icon={FaUser} label="Profile" onClick={() => router.push("/users/id")} />
+						<MenuItem
+							icon={FaUser}
+							label="Profile"
+							href={`/users/${loggedInUser?.id}`}
+							isProtected
+						/>
 
-						<MenuItem icon={BiLogOut} label="Log out" onClick={() => signOut()} />
+						<Fragment>
+							{loggedInUser ? (
+								<MenuItem icon={BiLogOut} label="Log out" onClick={() => signOut()} />
+							) : null}
+						</Fragment>
 					</Menu>
 
 					{/* Tweet button */}
-
-					<TweetButton />
+					<Fragment>{loggedInUser ? <TweetButton /> : null}</Fragment>
 				</div>
 			</div>
 		</aside>

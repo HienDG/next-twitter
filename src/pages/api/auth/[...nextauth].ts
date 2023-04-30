@@ -1,10 +1,11 @@
 import NextAuth, { type AuthOptions } from "next-auth";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
 import prisma from "@libs/prisma";
-import { signToken } from "@helper/api";
+import { signToken } from "@src/helper/api";
 
 export const authOptions: AuthOptions = {
 	adapter: PrismaAdapter(prisma),
@@ -31,6 +32,8 @@ export const authOptions: AuthOptions = {
 
 				if (!isCorrectPassword) throw new Error("Invalid credentials");
 
+				console.log(user);
+
 				return {
 					...user,
 					name: user.username,
@@ -50,8 +53,6 @@ export const authOptions: AuthOptions = {
 
 	callbacks: {
 		async jwt({ token, user, account }) {
-			console.log(account);
-
 			if (user && account) {
 				token.id = user.id;
 				token.accessToken = signToken(user.id);
@@ -69,4 +70,8 @@ export const authOptions: AuthOptions = {
 	},
 };
 
-export default NextAuth(authOptions);
+const auth = async (req: NextApiRequest, res: NextApiResponse) => {
+	return await NextAuth(req, res, authOptions);
+};
+
+export default auth;

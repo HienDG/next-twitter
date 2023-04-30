@@ -34,7 +34,7 @@ const SignUpModal: React.FC = () => {
 				username,
 			});
 
-			toast.success("Account has Created");
+			toast.success("Thanks for signing up. Your account has been created.");
 
 			await signIn("credentials", {
 				email,

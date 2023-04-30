@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 
 import { FormControl, InputField, Button } from "@src/components/ui";
 
 import { signInSchema, type SignInFormFields, defaultSignInField } from "@libs/zod";
+import { signInWithCredentials } from "@src/helper";
+import { useAuthModal } from "@src/hooks";
 
 const SignInModal: React.FC = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const { onClose } = useAuthModal();
+
 	const {
 		register,
 		handleSubmit,
@@ -24,12 +27,12 @@ const SignInModal: React.FC = () => {
 	const onSubmit: SubmitHandler<SignInFormFields> = async ({ email, password }) => {
 		setIsLoading(true);
 		try {
-			await signIn("credentials", {
+			const response = await signInWithCredentials({
 				email,
 				password,
 			});
 
-			toast.success("Logged Successful");
+			if (response?.ok) return onClose();
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				console.log(error.message);
@@ -59,7 +62,12 @@ const SignInModal: React.FC = () => {
 				{...register("password")}
 			/>
 
-			<Button className="w-full text-white capitalize rounded-full" variant="primary" type="submit">
+			<Button
+				className="w-full text-white capitalize rounded-full"
+				variant="primary"
+				type="submit"
+				isLoading={isLoading}
+			>
 				Sign In
 			</Button>
 		</FormControl>

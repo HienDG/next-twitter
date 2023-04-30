@@ -1,7 +1,7 @@
 import React from "react";
 
 interface MenuProps {
-	children: JSX.Element[] | JSX.Element;
+	children: React.ReactNode;
 }
 
 const Menu: React.FC<MenuProps> = ({ children }) => {

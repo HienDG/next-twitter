@@ -4,10 +4,10 @@ import { ModalLayout } from "@src/components/layouts";
 import SignUpModal from "./SignUp";
 import SignInModal from "./SignIn";
 
-import { useAuthModal } from "@src/hooks";
+import { useAuthModalStore } from "@src/hooks";
 
 const AuthenticationModal: React.FC = () => {
-	const { onClose, view, onChangeModalView } = useAuthModal();
+	const { onClose, view, onChangeModalView } = useAuthModalStore();
 
 	return (
 		<ModalLayout onClose={onClose} label={view === "sign-up" ? "Create an account" : "Login"}>

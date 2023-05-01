@@ -1,7 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
 import { signIn, SignInResponse } from "next-auth/react";
 import toast from "react-hot-toast";
-import useAuthModal from "./useAuthModal";
+
+import useAuthModalStore from "./useAuthModalStore";
 
 type Credentials = { email: string; password: string };
 
@@ -14,9 +15,9 @@ type Options = {
 
 const useSignInWithCredentials = (
 	options?: Options
-): [(credentials: Credentials) => Promise<void>, SignInResponse | undefined | null] => {
+): [(credentials: Credentials) => Promise<void>, SignInResponse | null] => {
 	const [response, setResponse] = useState<SignInResponse | null>(null);
-	const { onClose } = useAuthModal();
+	const { onClose } = useAuthModalStore();
 
 	const signInWithCredentials = useCallback(
 		(credentials: Credentials) =>

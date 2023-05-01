@@ -51,7 +51,7 @@ const Button: React.FC<ButtonProps> = ({
 	size = "md",
 	...restProps
 }) => {
-	const buttonClasses = clsx("btn", className, buttonVariants[variant], {
+	const buttonClasses = clsx("btn  capitalize", className, buttonVariants[variant], {
 		["loading"]: isLoading,
 		["btn-outline"]: outline,
 		["btn-disabled"]: disabled,

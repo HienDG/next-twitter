@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import type { IconType } from "react-icons";
 import { BsDot } from "react-icons/bs";
 
-import { useAuthModal, useUser } from "@src/hooks";
+import { useAuthModalStore, useUser } from "@src/hooks";
 
 interface MenuItemProps {
 	icon: IconType;
@@ -25,7 +25,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
 	href = "/",
 }) => {
 	const router = useRouter();
-	const { onOpen } = useAuthModal();
+	const { onOpen } = useAuthModalStore();
 	const { loggedInUser } = useUser();
 
 	const menuItemClasses = clsx(

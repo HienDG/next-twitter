@@ -10,7 +10,7 @@ interface AuthModalStore {
 	onChangeModalView: () => void;
 }
 
-const useAuthModal = create<AuthModalStore>((set) => ({
+const useAuthModalStore = create<AuthModalStore>((set) => ({
 	isOpen: false,
 	view: "sign-in",
 
@@ -20,4 +20,4 @@ const useAuthModal = create<AuthModalStore>((set) => ({
 		set((state) => ({ ...state, view: state.view === "sign-in" ? "sign-up" : "sign-in" })),
 }));
 
-export default useAuthModal;
+export default useAuthModalStore;

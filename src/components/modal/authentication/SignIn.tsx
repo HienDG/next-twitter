@@ -6,12 +6,15 @@ import toast from "react-hot-toast";
 import { FormControl, InputField, Button } from "@src/components/ui";
 
 import { signInSchema, type SignInFormFields, defaultSignInField } from "@libs/zod";
-import { signInWithCredentials } from "@src/helper";
-import { useAuthModal } from "@src/hooks";
+import { useSignInWithCredentials } from "@src/hooks";
 
 const SignInModal: React.FC = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { onClose } = useAuthModal();
+	const [signInWithCredentials] = useSignInWithCredentials({
+		toast: {
+			success: "You are successfully logged in",
+		},
+	});
 
 	const {
 		register,
@@ -27,19 +30,14 @@ const SignInModal: React.FC = () => {
 	const onSubmit: SubmitHandler<SignInFormFields> = async ({ email, password }) => {
 		setIsLoading(true);
 		try {
-			const response = await signInWithCredentials({
+			await signInWithCredentials({
 				email,
 				password,
 			});
-
-			if (response?.ok) return onClose();
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				console.log(error.message);
-			}
+			if (error instanceof Error) console.log(error.message);
 			toast.error("Something went wrong");
 		}
-
 		setIsLoading(false);
 		reset();
 	};

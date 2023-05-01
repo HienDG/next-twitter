@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 import { FormControl, InputField, Button } from "@src/components/ui";
 
 import { signUpSchema, type SignUpFormFields, defaultSignUpField } from "@libs/zod";
-import { useAuthModal } from "@src/hooks";
+import { useSignInWithCredentials } from "@src/hooks";
 
 const SignUpModal: React.FC = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const { onClose } = useAuthModal();
+	const [signInWithCredentials] = useSignInWithCredentials({
+		toast: {
+			success: "Thanks for signing up. Your account has been created.",
+		},
+	});
 
 	const {
 		register,
@@ -34,18 +37,12 @@ const SignUpModal: React.FC = () => {
 				username,
 			});
 
-			toast.success("Thanks for signing up. Your account has been created.");
-
-			await signIn("credentials", {
+			await signInWithCredentials({
 				email,
 				password,
 			});
-
-			onClose();
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				console.log(error);
-			}
+			if (error instanceof Error) console.log(error);
 			toast.error("Something went wrong");
 		}
 		setIsLoading(false);

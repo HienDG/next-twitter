@@ -13,10 +13,10 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({ label, children, onClose }) =
 		<section className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none bg-neutral-800 bg-opacity-70 scrollbar-hide max-md:bg-black">
 			<div className="relative w-full h-full mx-auto my-6 md:w-3/5 lg:w-2/5 lg:max-w-3xl md:h-auto">
 				{/* Content */}
-				<div className="relative flex flex-col w-full h-full bg-black border-0 rounded-lg shadow-lg outline-none lg:h-auto focus:outline-none">
+				<div className="relative flex flex-col w-full h-full bg-black border-0 rounded-lg shadow-lg outline-none lg:h-auto focus:outline-none min-h-[400px] max-h-[90vh] overflow-y-scroll scrollbar-hide">
 					{/* Header */}
 					<div className="flex items-center justify-between p-10 pb-5 rounded-t ">
-						<h3 className="flex-1 text-3xl font-semibold text-center text-white">{label}</h3>
+						<h3 className="flex-1 text-xl font-semibold text-white">{label}</h3>
 
 						<button
 							className="p-1 text-white transition border-0 hover:opacity-70"

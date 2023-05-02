@@ -19,7 +19,7 @@ const useUserInformation = (userId?: string) => {
 		userInformation: data,
 		error,
 		isLoading,
-		mutate,
+		mutateUserInformation: mutate,
 	};
 };
 

@@ -4,7 +4,7 @@ import { format } from "date-fns";
 
 import { Button } from "@src/components/ui";
 
-import { useUser, useUserInformation } from "@src/hooks";
+import { useUser, useUserInformation, useEditModalStore } from "@src/hooks";
 
 interface ProfileBioProps {
 	userId: string;
@@ -13,6 +13,7 @@ interface ProfileBioProps {
 const ProfileBio: React.FC<ProfileBioProps> = ({ userId }) => {
 	const { loggedInUser } = useUser();
 	const { userInformation } = useUserInformation(userId);
+	const { onOpen } = useEditModalStore();
 
 	const createdAt = useMemo(() => {
 		if (!userInformation?.createdAt) {
@@ -26,7 +27,12 @@ const ProfileBio: React.FC<ProfileBioProps> = ({ userId }) => {
 		<div className="border-b-[1px] border-neutral-800 pb-4">
 			<div className="flex justify-end p-2">
 				{loggedInUser?.id === userId ? (
-					<Button outline className="min-w-[36px] rounded-full px-4 text-white" size="sm">
+					<Button
+						outline
+						className="min-w-[36px] rounded-full px-4 text-white"
+						size="sm"
+						onClick={onOpen}
+					>
 						Edit Profile
 					</Button>
 				) : (

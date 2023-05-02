@@ -3,10 +3,10 @@ import { getServerSession } from "next-auth";
 
 import prisma from "@libs/prisma";
 import { catchAsyncErrors } from "@src/helper";
-import { authOptions } from "./auth/[...nextauth]";
+import { authOptions } from "@libs/next-auth";
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
-	if (req.method !== "GET") return res.status(405).end(`Method ${req.method} Not Allowed`);
+	if (req.method !== "PATCH") return res.status(405).end(`Method ${req.method} Not Allowed`);
 
 	const severSession = await getServerSession(req, res, authOptions);
 
@@ -20,7 +20,30 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 
 	if (!loggedInUser) throw new Error("Not Signed In");
 
-	return res.status(200).json(loggedInUser);
+	const { name, username, bio, coverImage, profileImage } = req.body;
+
+	const updatedUser = await prisma.user.update({
+		where: {
+			id: loggedInUser.id,
+		},
+		data: {
+			name,
+			username,
+			bio,
+			profileImage,
+			coverImage,
+		},
+	});
+
+	return res.status(200).json(updatedUser);
 });
+
+export const config = {
+	api: {
+		bodyParser: {
+			sizeLimit: "10mb",
+		},
+	},
+};
 
 export default handler;

@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import clsx from "clsx";
 
+import { useUserInformation } from "@src/hooks";
+
 interface AvatarProps {
 	userId?: string;
 	isLarge?: boolean;
@@ -10,19 +12,20 @@ interface AvatarProps {
 }
 
 const Avatar: React.FC<AvatarProps> = ({ isLarge = false, hasBorder = false, userId = "" }) => {
+	const { userInformation } = useUserInformation(userId);
+
+	const containerClasses = clsx(
+		"rounded-full hover:opacity-90 transition cursor-pointer relative",
+		{
+			["h-32"]: hasBorder,
+			["h-12"]: !hasBorder,
+			["w-32"]: isLarge,
+			["w-12"]: !isLarge,
+		}
+	);
+
 	return (
-		<div
-			className={`
-      ${hasBorder ? "border-4 border-black" : ""}
-      ${isLarge ? "h-32" : "h-12"}
-      ${isLarge ? "w-32" : "w-12"}
-      rounded-full 
-      hover:opacity-90 
-      transition 
-      cursor-pointer
-      relative
-    `}
-		>
+		<div className={containerClasses}>
 			<Image
 				fill
 				style={{
@@ -30,7 +33,7 @@ const Avatar: React.FC<AvatarProps> = ({ isLarge = false, hasBorder = false, use
 					borderRadius: "100%",
 				}}
 				alt="Avatar"
-				src={"/images/placeholder.png"}
+				src={userInformation?.profileImage || "/images/placeholder.png"}
 			/>
 		</div>
 	);

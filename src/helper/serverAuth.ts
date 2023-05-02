@@ -2,12 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
 import prisma from "@libs/prisma";
-import { catchAsyncErrors } from "@src/helper";
-import { authOptions } from "./auth/[...nextauth]";
+import { authOptions } from "@src/pages/api/auth/[...nextauth]";
 
-const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
-	if (req.method !== "GET") return res.status(405).end(`Method ${req.method} Not Allowed`);
-
+const serverAuth = async (req: NextApiRequest, res: NextApiResponse) => {
 	const severSession = await getServerSession(req, res, authOptions);
 
 	if (!severSession?.user.email) throw new Error("Not Signed in");
@@ -20,7 +17,6 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 
 	if (!loggedInUser) throw new Error("Not Signed In");
 
-	return res.status(200).json(loggedInUser);
-});
-
-export default handler;
+	return { loggedInUser };
+};
+export default serverAuth;

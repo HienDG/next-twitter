@@ -13,6 +13,10 @@ declare module "next-auth" {
 			accessToken?: string;
 		} & DefaultSession["user"];
 	}
+
+	interface User {
+		token: string;
+	}
 }
 
 declare module "next-auth/jwt" {

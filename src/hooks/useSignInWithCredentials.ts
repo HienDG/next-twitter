@@ -25,6 +25,7 @@ const useSignInWithCredentials = (
 				...credentials,
 				redirect: false,
 			}).then((res) => {
+				console.log(res);
 				if (res && res.ok) {
 					setResponse(res);
 				} else {

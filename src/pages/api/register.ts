@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
 
 import prisma from "@libs/prisma";
-import { catchAsyncErrors } from "@src/helper/api";
+import { catchAsyncErrors } from "@src/helper";
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "POST") return res.status(405).end(`Method ${req.method} Not Allowed`);

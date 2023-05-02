@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
 import prisma from "@libs/prisma";
-import { signToken } from "@src/helper/api";
+import { signToken } from "@src/helper";
 
 export const authOptions: AuthOptions = {
 	adapter: PrismaAdapter(prisma),
@@ -30,13 +30,21 @@ export const authOptions: AuthOptions = {
 
 				const isCorrectPassword = await bcrypt.compare(credentials.password, user.hashedPassword);
 
+				const token = signToken({
+					email: user.email,
+					name: user.name,
+					id: user.id,
+					image: user.coverImage,
+				});
+
 				if (!isCorrectPassword) throw new Error("Invalid credentials");
 
-				console.log(user);
-
 				return {
-					...user,
-					name: user.username,
+					email: user.email,
+					name: user.name,
+					id: user.id,
+					image: user.coverImage,
+					token,
 				};
 			},
 		}),
@@ -55,7 +63,7 @@ export const authOptions: AuthOptions = {
 		async jwt({ token, user, account }) {
 			if (user && account) {
 				token.id = user.id;
-				token.accessToken = signToken(user.id);
+				token.accessToken = user.token;
 				token.name = user.name;
 			}
 			return token;

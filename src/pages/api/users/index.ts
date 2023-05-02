@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
 import prisma from "@libs/prisma";
-import { catchAsyncErrors } from "@src/helper/api";
+import { catchAsyncErrors } from "@src/helper";
 import { authOptions } from "../auth/[...nextauth]";
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {

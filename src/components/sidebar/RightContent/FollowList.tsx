@@ -1,23 +1,23 @@
 import React, { Fragment } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import type { User } from "@prisma/client";
 
 import { Avatar } from "@src/components/ui";
 
-import { useFollower } from "@src/hooks";
+interface FollowListProps {
+	followers?: User[];
+}
 
-interface FollowListProps {}
-
-const FollowList: React.FC<FollowListProps> = () => {
+const FollowList: React.FC<FollowListProps> = ({ followers = [] }) => {
 	const { data: session } = useSession();
-	const { users } = useFollower();
 
 	return (
-		<div className="w-full overflow-hidden bg-neutral-800 rounded-2xl">
-			<h2 className="px-6 py-4 text-xl font-semibold text-white">Who to follow</h2>
-			<div className="flex flex-col pt-4 min-h-[200px] ">
+		<div className="flex flex-col w-full h-full max-h-[360px]">
+			<h2 className="px-6 py-4 text-xl font-semibold text-center text-white">Who to follow</h2>
+			<div className="flex flex-col mb-2">
 				<Fragment>
-					{users.map((user) => (
+					{followers.map((user) => (
 						<Link
 							key={user.id}
 							className="flex flex-row gap-4 px-6 py-4 cursor-pointer group/user hover:bg-slate-300 hover:bg-opacity-10"
@@ -36,14 +36,14 @@ const FollowList: React.FC<FollowListProps> = () => {
 						</Link>
 					))}
 				</Fragment>
-
-				<Link
-					href={`/connect_people?userId=${session?.user.id}`}
-					className="px-6 py-4 text-blue-700 cursor-pointer hover:bg-slate-300 hover:bg-opacity-10"
-				>
-					Show more
-				</Link>
 			</div>
+			
+			<Link
+				href={`/connect_people?userId=${session?.user.id}`}
+				className="px-6 py-4 text-blue-700 cursor-pointer hover:bg-slate-300 hover:bg-opacity-10"
+			>
+				Show more
+			</Link>
 		</div>
 	);
 };

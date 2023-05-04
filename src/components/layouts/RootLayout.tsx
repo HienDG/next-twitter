@@ -24,6 +24,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children, session }) => {
 			<div className="min-h-screen bg-slate-900/50 scrollbar-hide">
 				<div className="container h-screen mx-auto max-w-7xl xl:px-30">{children}</div>
 			</div>
+
 			<Fragment>{isAuthModalOpen ? <AuthenticationModal /> : null}</Fragment>
 			<Fragment>{isEditModalOpen ? <EditProfileModal /> : null}</Fragment>
 			<Toaster />

@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import type { AppProps } from "next/app";
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import NProgress from "nprogress";
+import type { AppProps } from "next/app";
+import type { NextPage } from "next";
 
 import { RootLayout, MainContentLayout } from "@src/components/layouts";
 
@@ -12,6 +12,7 @@ import "@src/styles/globals.css";
 const App: NextPage<AppProps> = ({ Component, pageProps: { session, ...pageProps } }) => {
 	const router = useRouter();
 
+	// display progress bars when changing routes
 	useEffect(() => {
 		const handleStart = () => NProgress.start();
 		const handleComplete = () => NProgress.done();

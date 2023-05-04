@@ -30,7 +30,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = () => {
 		const { name, username, bio } = data;
 		setIsLoading(true);
 		try {
-			await axios.patch("/api/edit", {
+			await axios.patch("/api/updateMe", {
 				name,
 				username,
 				bio,

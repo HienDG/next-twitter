@@ -10,29 +10,48 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 
 	const severSession = await getServerSession(req, res, authOptions);
 
-	if (!severSession?.user.email) throw new Error("Not Signed in");
+	if (severSession?.user.email) {
+		const users = await prisma.user.findMany({
+			// Filter emails not include email current user
+			where: {
+				NOT: [
+					{
+						email: {
+							contains: severSession.user.email,
+						},
+					},
+				],
+			},
+
+			orderBy: {
+				createdAt: "desc",
+			},
+
+			skip: 0,
+			take: 3,
+		});
+
+		return res.status(200).json(users);
+	}
 
 	const users = await prisma.user.findMany({
-		// Filter emails not include email current user
-		where: {
-			NOT: [
-				{
-					email: {
-						contains: severSession.user.email,
-					},
-				},
-			],
-		},
-
 		orderBy: {
 			createdAt: "desc",
 		},
 
 		skip: 0,
-		take: 5,
+		take: 3,
 	});
 
 	return res.status(200).json(users);
 });
+
+export const config = {
+	api: {
+		bodyParser: {
+			sizeLimit: "10mb",
+		},
+	},
+};
 
 export default handler;

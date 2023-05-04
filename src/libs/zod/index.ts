@@ -5,3 +5,4 @@ export {
 	type EditProfileFormFields,
 	defaultEditProfileField,
 } from "./editProfileSchema";
+export { default as postSchema, type PostFields } from "./postSchema";

@@ -13,8 +13,8 @@ import { editProfileSchema, type EditProfileFormFields, defaultEditProfileField 
 interface EditProfileModalProps {}
 
 const EditProfileModal: React.FC<EditProfileModalProps> = () => {
-	const [profileImage, setProfileImage] = useState<string | null | undefined>(null);
-	const [coverImage, setCoverImage] = useState<string | null | undefined>(null);
+	const [profileImage, setProfileImage] = useState<string | null>(null);
+	const [coverImage, setCoverImage] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const { loggedInUser } = useUser();

@@ -1,2 +1,3 @@
 export { default as PostFeed } from "./PostFeed";
-export { default as CreateNewPost } from "./CreateNewPost";
+export { default as Tweet } from "./Tweet";
+export { default as TweetForm } from "./Tweet/TweetForm";

@@ -1,17 +1,11 @@
 import React from "react";
-import toast from "react-hot-toast";
-import axios from "axios";
 
-import { Avatar } from "@src/components/ui";
-import { Button } from "@src/components/ui";
+import { Avatar, Button } from "@src/components/ui";
+import TweetForm from "./TweetForm";
 
 import { useUser, useAuthModalStore } from "@src/hooks";
 
-interface CreateNewPostProps {
-	placeholder: string;
-}
-
-const CreateNewPost: React.FC<CreateNewPostProps> = ({ placeholder }) => {
+const Tweet: React.FC = () => {
 	const { onOpen } = useAuthModalStore();
 	const { loggedInUser } = useUser();
 
@@ -22,18 +16,7 @@ const CreateNewPost: React.FC<CreateNewPostProps> = ({ placeholder }) => {
 					<div>
 						<Avatar userId={loggedInUser.id} />
 					</div>
-					<div className="w-full">
-						<textarea
-							className="disabled:opacity-80 peer resize-none mt-3 w-full bg-inherit ring-0 outline-none text-[20px] placeholder-neutral-500 text-white px-4"
-							placeholder={placeholder}
-						></textarea>
-						<hr className=" opacity-0 peer-focus:opacity-100 h-[1px] w-full border-neutral-800 transition" />
-						<div className="flex flex-row justify-end mt-4">
-							<Button size="sm" variant="primary" className="rounded-full min-w-[100px]">
-								Tweet
-							</Button>
-						</div>
-					</div>
+					<TweetForm placeholder="What's happening?" />
 				</div>
 			) : (
 				<div className="py-10">
@@ -60,4 +43,4 @@ const CreateNewPost: React.FC<CreateNewPostProps> = ({ placeholder }) => {
 		</div>
 	);
 };
-export default CreateNewPost;
+export default Tweet;

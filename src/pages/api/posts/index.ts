@@ -14,8 +14,21 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 				userId: userId,
 			},
 			include: {
-				user: true,
-				comments: true,
+				user: {
+					select: {
+						email: true,
+						id: true,
+						username: true,
+						name: true,
+					},
+				},
+				comments: {
+					select: {
+						id: true,
+						body: true,
+						userId: true,
+					},
+				},
 			},
 			orderBy: {
 				createdAt: "desc",
@@ -30,8 +43,21 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 			createdAt: "desc",
 		},
 		include: {
-			comments: true,
-			user: true,
+			user: {
+				select: {
+					email: true,
+					id: true,
+					username: true,
+					name: true,
+				},
+			},
+			comments: {
+				select: {
+					id: true,
+					body: true,
+					userId: true,
+				},
+			},
 		},
 	});
 

@@ -10,6 +10,7 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 	const { loggedInUser } = await getLoggedInUser(req, res);
 
 	const { name, username, bio, coverImage, profileImage } = req.body;
+
 	const updatedUser = await prisma.user.update({
 		where: {
 			id: loggedInUser.id,

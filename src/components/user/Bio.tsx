@@ -4,13 +4,14 @@ import { format } from "date-fns";
 
 import { Button } from "@src/components/ui";
 
-import { useUser, useUserInformation, useEditModalStore } from "@src/hooks";
+import { useUser, useUserInformation, useEditModalStore, useFollow } from "@src/hooks";
 
 interface ProfileBioProps {
 	userId: string;
 }
 
 const ProfileBio: React.FC<ProfileBioProps> = ({ userId }) => {
+	const { isFollowing, toggleFollow } = useFollow(userId);
 	const { loggedInUser } = useUser();
 	const { userInformation } = useUserInformation(userId);
 	const { onOpen } = useEditModalStore();
@@ -20,10 +21,6 @@ const ProfileBio: React.FC<ProfileBioProps> = ({ userId }) => {
 
 		return format(new Date(userInformation.createdAt), "MMMM yyyy");
 	}, [userInformation?.createdAt]);
-
-	const handleClick = () => {
-		if (!loggedInUser) return onOpen();
-	};
 
 	return (
 		<div className="border-b-[1px] border-neutral-800 pb-4">
@@ -42,9 +39,9 @@ const ProfileBio: React.FC<ProfileBioProps> = ({ userId }) => {
 						variant="primary"
 						className="min-w-[36px] rounded-full px-4"
 						size="sm"
-						onClick={handleClick}
+						onClick={toggleFollow}
 					>
-						follow
+						{isFollowing ? "unFollow" : "Follow"}
 					</Button>
 				)}
 			</div>

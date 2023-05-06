@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import prisma from "@libs/prisma";
-import { catchAsyncErrors } from "@src/helper";
+import { catchAsyncErrors, isString } from "@src/helper";
 import { getLoggedInUser } from "./loggedInUser";
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
@@ -11,7 +11,7 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 
 	const { body, image } = req.body;
 
-	if (typeof body !== "string") throw new Error("Invalid Post Content");
+	if (!isString(body)) throw new Error("Invalid Post Content");
 
 	const post = await prisma.post.create({
 		data: {

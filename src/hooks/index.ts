@@ -6,3 +6,4 @@ export { default as useUserInformation } from "./useUserInformation";
 export { default as useEditModalStore } from "./useEditModalStore";
 export { default as usePosts, type PostObject } from "./usePosts";
 export { default as useTweetModalStore } from "./useTweetModalStore";
+export { default as useFollow } from "./useFollow";

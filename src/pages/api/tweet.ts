@@ -9,13 +9,14 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 
 	const { loggedInUser } = await getLoggedInUser(req, res);
 
-	const { body } = req.body;
+	const { body, image } = req.body;
 
 	if (typeof body !== "string") throw new Error("Invalid Post Content");
 
 	const post = await prisma.post.create({
 		data: {
 			body,
+			image: image,
 			userId: loggedInUser.id,
 		},
 	});

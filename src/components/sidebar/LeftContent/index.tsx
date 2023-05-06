@@ -17,7 +17,7 @@ const LeftContent: React.FC = () => {
 
 	return (
 		<aside className="h-full col-span-1 md:pr-6">
-			<div className="flex flex-col items-end">
+			<div className="fixed inset-y-0 flex flex-col items-end ">
 				<div className="space-y-4 lg:w-[230px]">
 					{/* Logo */}
 					<Logo />

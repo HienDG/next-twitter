@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 import { DropzoneRef } from "react-dropzone";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -20,33 +21,37 @@ interface TweetFormProps {
 }
 
 const TweetForm: React.FC<TweetFormProps> = ({ placeholder, sizes = "md" }) => {
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const dropzoneRef = useRef<DropzoneRef>(null);
 	const [selectedFile, setSelectedFile] = useState<string | null>(null);
 	const { mutate: mutatePosts } = usePosts();
 
 	const {
 		register,
-		formState: { isDirty },
+		formState: { isDirty, errors },
 		handleSubmit,
 		reset,
 	} = useForm<PostFields>({
-		resolver: zodResolver(postSchema),
 		mode: "onChange",
 		defaultValues: {
 			body: "",
 		},
+		resolver: zodResolver(postSchema),
 	});
 
 	const onSubmit: SubmitHandler<PostFields> = async ({ body }) => {
+		setIsLoading(true);
 		try {
-			await axios.post("/api/tweet", { body });
+			await axios.post("/api/tweet", { body, image: selectedFile });
+
+			toast.success("Tweet created");
 			mutatePosts();
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				console.log(error.message);
-			}
+			if (error instanceof Error) console.log(error.message);
+			toast.error("Something went wrong");
 		}
-
+		setIsLoading(false);
+		setSelectedFile(null);
 		reset();
 	};
 
@@ -64,6 +69,7 @@ const TweetForm: React.FC<TweetFormProps> = ({ placeholder, sizes = "md" }) => {
 						["textarea-xs min-h-[70px]"]: sizes === "xs",
 						["textarea-sm min-h-[50px]"]: sizes === "sm",
 						["textarea-lg min-h-[150px]"]: sizes === "lg",
+						["textarea-error"]: errors.body?.message,
 					}
 				)}
 				placeholder={placeholder}
@@ -77,12 +83,12 @@ const TweetForm: React.FC<TweetFormProps> = ({ placeholder, sizes = "md" }) => {
 				dropZoneOpt={{
 					noDrag: true,
 				}}
-				height={300}
-				width={200}
+				height={400}
+				width={400}
 				noBorder
 			/>
 
-			<hr className={"h-[2px] w-full border-x-neutral-800 transition hidden peer-focus:block"} />
+			<hr className="h-[2px] w-full border-x-neutral-800 transition opacity-0 peer-focus:opacity-100" />
 
 			<div className="flex flex-row justify-between mt-4">
 				<ButtonGroup className="items-center gap-4 [&>svg]:cursor-pointer [&>svg]:fill-blue-600">
@@ -98,7 +104,8 @@ const TweetForm: React.FC<TweetFormProps> = ({ placeholder, sizes = "md" }) => {
 					type="submit"
 					variant="primary"
 					className="rounded-full min-w-[100px] text-white"
-					disabled={!isDirty}
+					disabled={!isDirty || !!errors.body?.message}
+					isLoading={isLoading}
 				>
 					Tweet
 				</Button>

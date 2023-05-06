@@ -3,13 +3,13 @@ import { User, Post, Comment } from "@prisma/client";
 
 import { fetcher } from "@src/helper";
 
-type Posts = Post & {
+export type PostObject = Post & {
 	user: User;
 	comments: Comment[];
 };
 
 const usePosts = (userId?: string) => {
-	const { data, error, isLoading, mutate } = useSWR<Posts[], Error>(
+	const { data, error, isLoading, mutate } = useSWR<PostObject[], Error>(
 		() => (userId ? `/api/posts?userId=${userId}` : "/api/posts"),
 
 		fetcher

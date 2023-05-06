@@ -21,6 +21,10 @@ const ProfileBio: React.FC<ProfileBioProps> = ({ userId }) => {
 		return format(new Date(userInformation.createdAt), "MMMM yyyy");
 	}, [userInformation?.createdAt]);
 
+	const handleClick = () => {
+		if (!loggedInUser) return onOpen();
+	};
+
 	return (
 		<div className="border-b-[1px] border-neutral-800 pb-4">
 			<div className="flex justify-end p-2">
@@ -34,8 +38,13 @@ const ProfileBio: React.FC<ProfileBioProps> = ({ userId }) => {
 						Edit Profile
 					</Button>
 				) : (
-					<Button variant="primary" className="min-w-[36px] rounded-full px-4" size="sm">
-						Unfollow
+					<Button
+						variant="primary"
+						className="min-w-[36px] rounded-full px-4"
+						size="sm"
+						onClick={handleClick}
+					>
+						follow
 					</Button>
 				)}
 			</div>

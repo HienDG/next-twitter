@@ -16,14 +16,14 @@ const Hero: React.FC<HeroProps> = ({ userId }) => {
 		<div>
 			<div className="relative bg-neutral-700 h-44">
 				<Fragment>
-					{userInformation?.coverImage && (
+					{userInformation?.coverImage ? (
 						<Image
 							src={userInformation.coverImage || "/images/placeholder.png"}
 							fill
 							alt="Cover Image"
 							style={{ objectFit: "cover" }}
 						/>
-					)}
+					) : null}
 				</Fragment>
 				<div className="absolute -bottom-16 left-4">
 					<Avatar userId={userId} isLarge hasBorder />

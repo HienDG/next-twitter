@@ -1,5 +1,4 @@
 import React from "react";
-import { useRouter } from "next/router";
 import Image from "next/image";
 import clsx from "clsx";
 
@@ -14,7 +13,7 @@ interface AvatarProps {
 const Avatar: React.FC<AvatarProps> = ({ isLarge = false, hasBorder = false, userId = "" }) => {
 	const { userInformation } = useUserInformation(userId);
 
-	const containerClasses = clsx(
+	const imageContainerClasses = clsx(
 		"rounded-full hover:opacity-90 transition cursor-pointer relative",
 		{
 			["h-32"]: hasBorder,
@@ -25,7 +24,7 @@ const Avatar: React.FC<AvatarProps> = ({ isLarge = false, hasBorder = false, use
 	);
 
 	return (
-		<div className={containerClasses}>
+		<div className={imageContainerClasses}>
 			<Image
 				fill
 				style={{

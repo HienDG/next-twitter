@@ -11,9 +11,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ showBackArrowIcon, label }) => {
 	const router = useRouter();
 
-	const handleBack = useCallback(() => {
-		router.back();
-	}, [router]);
+	const handleBack = useCallback(() => router.back(), [router]);
 
 	return (
 		<header className="border-b-[1px] border-neutral-800 p-5">
@@ -26,6 +24,7 @@ const Header: React.FC<HeaderProps> = ({ showBackArrowIcon, label }) => {
 						className="transition rounded-full cursor-pointer hover:opacity-70"
 					/>
 				)}
+
 				<h1 className="text-xl font-semibold text-white">{label}</h1>
 			</div>
 		</header>

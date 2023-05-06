@@ -16,9 +16,7 @@ const ProfileBio: React.FC<ProfileBioProps> = ({ userId }) => {
 	const { onOpen } = useEditModalStore();
 
 	const createdAt = useMemo(() => {
-		if (!userInformation?.createdAt) {
-			return null;
-		}
+		if (!userInformation?.createdAt) return null;
 
 		return format(new Date(userInformation.createdAt), "MMMM yyyy");
 	}, [userInformation?.createdAt]);

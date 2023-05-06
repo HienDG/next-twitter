@@ -1,21 +1,8 @@
 import jwt from "jsonwebtoken";
 
-type SignTokenArgs = string | Record<string, any>;
+type SignTokenPayload = Record<string, any>;
 
-const signToken = (
-	data:
-		| string
-		| {
-				[key: string]: any;
-		  }
-) => {
-	const payload =
-		typeof data === "string"
-			? {
-					id: data,
-			  }
-			: data;
-
+const signToken = (payload: SignTokenPayload) => {
 	return jwt.sign(payload, process.env["JWT_SECRET"] as string, {
 		expiresIn: process.env["JWT_EXPIRES_IN"] as string,
 	});

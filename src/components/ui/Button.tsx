@@ -22,7 +22,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	size?: ButtonSize;
 }
 
-const buttonVariants: Record<VariantKey, string> = {
+const BUTTON_VARIANTS: Record<VariantKey, string> = {
 	primary: "btn-primary",
 	secondary: "btn-secondary",
 	accent: "btn-accent",
@@ -34,7 +34,7 @@ const buttonVariants: Record<VariantKey, string> = {
 	"no-variant": "",
 };
 
-const buttonSize: Record<ButtonSize, string> = {
+const BUTTON_SIZES: Record<ButtonSize, string> = {
 	lg: "btn-lg",
 	md: "btn-md",
 	sm: "btn-sm",
@@ -51,11 +51,11 @@ const Button: React.FC<ButtonProps> = ({
 	size = "md",
 	...restProps
 }) => {
-	const buttonClasses = clsx("btn  capitalize", className, buttonVariants[variant], {
+	const buttonClasses = clsx("btn  capitalize", className, BUTTON_VARIANTS[variant], {
 		["loading"]: isLoading,
 		["btn-outline"]: outline,
 		["btn-disabled"]: disabled,
-		[buttonSize[size]]: size,
+		[BUTTON_SIZES[size]]: size,
 	});
 
 	return (

@@ -8,7 +8,7 @@ interface MainContentLayoutProps {
 
 const MainContentLayout: React.FC<MainContentLayoutProps> = ({ children }) => {
 	return (
-		<div className="grid h-full grid-cols-4 gap-6">
+		<div className="grid min-h-screen grid-cols-4 gap-6">
 			{/* Sidebar */}
 			<LeftContent />
 

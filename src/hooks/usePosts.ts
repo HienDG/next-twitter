@@ -3,9 +3,13 @@ import { User, Post, Comment } from "@prisma/client";
 
 import { fetcher } from "@src/helper";
 
+export type CommentObject = Comment & {
+	user: User;
+};
+
 export type PostObject = Post & {
 	user: User;
-	comments: Comment[];
+	comments: CommentObject[];
 };
 
 const usePosts = (userId?: string) => {

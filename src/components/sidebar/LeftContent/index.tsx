@@ -16,8 +16,8 @@ const LeftContent: React.FC = () => {
 	const { loggedInUser } = useUser();
 
 	return (
-		<aside className="h-full col-span-1 md:pr-6">
-			<div className="fixed inset-y-0 flex flex-col items-end ">
+		<aside className="h-full col-span-1">
+			<div className="sticky top-0 bottom-0 flex flex-col items-end">
 				<div className="space-y-4 lg:w-[230px]">
 					{/* Logo */}
 					<Logo />

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, Fragment } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { DropzoneRef } from "react-dropzone";
@@ -12,20 +12,31 @@ import { HiLocationMarker } from "react-icons/hi";
 
 import { Button, FormControl, ButtonGroup, ImageUpload } from "@src/components/ui";
 
-import { usePosts } from "@src/hooks";
+import { usePosts, useFetchSinglePost } from "@src/hooks";
 import { type PostFields, postSchema } from "@libs/zod";
 
 interface TweetFormProps {
-	placeholder: string;
+	placeholder?: string;
 	sizes?: "md" | "lg" | "xs" | "sm";
+	isComment?: boolean;
+	postId?: string;
 }
 
-const TweetForm: React.FC<TweetFormProps> = ({ placeholder, sizes = "md" }) => {
+const TweetForm: React.FC<TweetFormProps> = ({
+	placeholder,
+	sizes = "md",
+	postId,
+	isComment = false,
+}) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const dropzoneRef = useRef<DropzoneRef>(null);
 	const [selectedFile, setSelectedFile] = useState<string | null>(null);
-	const { mutate: mutatePosts } = usePosts();
+	const dropzoneRef = useRef<DropzoneRef>(null);
 
+	const { mutate: mutatePosts } = usePosts();
+	const { mutateSinglePost } = useFetchSinglePost(postId);
+
+
+	
 	const {
 		register,
 		formState: { isDirty, errors },
@@ -42,10 +53,12 @@ const TweetForm: React.FC<TweetFormProps> = ({ placeholder, sizes = "md" }) => {
 	const onSubmit: SubmitHandler<PostFields> = async ({ body }) => {
 		setIsLoading(true);
 		try {
-			await axios.post("/api/tweet", { body, image: selectedFile });
+			const url = isComment ? `/api/comments?postId=${postId}` : "/api/tweet";
+			await axios.post(url, { body, image: selectedFile });
 
-			toast.success("Tweet created");
+			toast.success(isComment ? "Comment created" : "Tweet created");
 			mutatePosts();
+			mutateSinglePost();
 		} catch (error: unknown) {
 			if (error instanceof Error) console.log(error.message);
 			toast.error("Something went wrong");
@@ -76,28 +89,41 @@ const TweetForm: React.FC<TweetFormProps> = ({ placeholder, sizes = "md" }) => {
 				{...register("body")}
 			/>
 
-			<ImageUpload
-				ref={dropzoneRef}
-				setSelectedFileUrl={setSelectedFile}
-				selectedFileUrl={selectedFile}
-				dropZoneOpt={{
-					noDrag: true,
-				}}
-				height={400}
-				width={400}
-				noBorder
-			/>
+			<Fragment>
+				{!isComment ? (
+					<ImageUpload
+						ref={dropzoneRef}
+						setSelectedFileUrl={setSelectedFile}
+						selectedFileUrl={selectedFile}
+						dropZoneOpt={{
+							noDrag: true,
+						}}
+						height={400}
+						width={400}
+						noBorder
+					/>
+				) : null}
+			</Fragment>
 
 			<hr className="h-[2px] w-full border-x-neutral-800 transition opacity-0 peer-focus:opacity-100" />
 
-			<div className="flex flex-row justify-between mt-4">
-				<ButtonGroup className="items-center gap-4 [&>svg]:cursor-pointer [&>svg]:fill-blue-600">
-					<BsFillImageFill className="w-5 h-5 hover:opacity-80" onClick={uploadImage} />
-					<BsFiletypeGif className="w-5 h-5 hover:opacity-80" />
-					<BsEmojiSmile className="w-5 h-5 hover:opacity-80" />
-					<AiFillSchedule className="w-5 h-5 hover:opacity-80" />
-					<HiLocationMarker className="w-5 h-5 opacity-70 bg-opacity-80" />
-				</ButtonGroup>
+			<div
+				className={clsx("flex flex-row mt-4", {
+					["justify-end"]: isComment,
+					["justify-between"]: !isComment,
+				})}
+			>
+				<Fragment>
+					{!isComment ? (
+						<ButtonGroup className="items-center gap-4 [&>svg]:cursor-pointer [&>svg]:fill-blue-600">
+							<BsFillImageFill className="w-5 h-5 hover:opacity-80" onClick={uploadImage} />
+							<BsFiletypeGif className="w-5 h-5 hover:opacity-80" />
+							<BsEmojiSmile className="w-5 h-5 hover:opacity-80" />
+							<AiFillSchedule className="w-5 h-5 hover:opacity-80" />
+							<HiLocationMarker className="w-5 h-5 opacity-70 bg-opacity-80" />
+						</ButtonGroup>
+					) : null}
+				</Fragment>
 
 				<Button
 					size="sm"

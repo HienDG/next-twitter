@@ -1,10 +1,10 @@
 import useSWR from "swr";
-import { Post } from "@prisma/client";
 
 import { fetcher } from "@src/helper";
+import type { PostObject } from "./usePosts";
 
 const useFetchSinglePost = (postId?: string) => {
-	const { data, error, isLoading, mutate } = useSWR<Post, Error>(
+	const { data, error, isLoading, mutate } = useSWR<PostObject, Error>(
 		() => (postId ? `/api/posts/${postId}` : null),
 		fetcher
 	);

@@ -5,7 +5,13 @@ import TweetForm from "./TweetForm";
 
 import { useUser, useAuthModalStore } from "@src/hooks";
 
-const Tweet: React.FC = () => {
+interface TweetProps {
+	isComment?: boolean;
+	placeholder?: string;
+	postId?: string;
+}
+
+const Tweet: React.FC<TweetProps> = ({ isComment, postId, placeholder }) => {
 	const { onOpen } = useAuthModalStore();
 	const { loggedInUser } = useUser();
 
@@ -16,7 +22,12 @@ const Tweet: React.FC = () => {
 					<div>
 						<Avatar userId={loggedInUser.id} />
 					</div>
-					<TweetForm placeholder="What's happening?" />
+					<TweetForm
+						isComment={isComment}
+						postId={postId}
+						placeholder={placeholder || "What's happening?"}
+						sizes="md"
+					/>
 				</div>
 			) : (
 				<div className="py-10">

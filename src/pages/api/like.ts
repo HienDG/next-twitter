@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { Post } from "@prisma/client";
 
 import prisma from "@libs/prisma";
 import { catchAsyncErrors, isString, isValidPrismaDocument } from "@src/helper";
 import { getLoggedInUser } from "./loggedInUser";
+import { createNotification } from "./notification";
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "POST" && req.method !== "DELETE")
@@ -30,7 +30,13 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 	if (req.method === "DELETE")
 		updatedLikedIds = updatedLikedIds.filter((followingId) => followingId !== postId);
 
-	if (req.method === "POST") updatedLikedIds.push(postId);
+	if (req.method === "POST") {
+		updatedLikedIds.push(loggedInUser.id);
+
+		if (isString(post.userId)) {
+			await createNotification(post.userId, "Someone liked your tweet!");
+		}
+	}
 
 	const updatedPost = await prisma.post.update({
 		where: {

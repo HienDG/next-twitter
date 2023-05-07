@@ -3,10 +3,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@libs/prisma";
 import { catchAsyncErrors, isString, isValidPrismaDocument } from "@src/helper";
 import { getLoggedInUser } from "./loggedInUser";
+import { createNotification } from "./notification";
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "POST" && req.method !== "DELETE")
 		return res.status(405).end(`Method ${req.method} Not Allowed`);
+
 	let updatedFollowingIds: string[];
 
 	const { userId } = req.query;
@@ -26,7 +28,11 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 	if (req.method === "DELETE")
 		updatedFollowingIds = updatedFollowingIds.filter((followingId) => followingId !== userId);
 
-	if (req.method === "POST") updatedFollowingIds.push(userId);
+	if (req.method === "POST") {
+		updatedFollowingIds.push(userId);
+
+		await createNotification(userId, "Someone followed you!");
+	}
 
 	const updatedCurrentUser = await prisma.user.update({
 		where: {

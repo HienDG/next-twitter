@@ -32,10 +32,9 @@ const PostItem: React.FC<PostItemProps> = ({ post, userId }) => {
 		[post.user.id, router]
 	);
 
-	const navigateToThePostView = useCallback(
-		() => router.push(`posts/${post.id}`),
-		[post.id, router]
-	);
+	const navigateToThePostView = useCallback(() => {
+		if (router.pathname !== "/posts/[postId]") return router.push(`/posts/${post.id}`);
+	}, [post.id, router]);
 
 	const createdAt = useMemo(() => {
 		if (!post?.createdAt) {

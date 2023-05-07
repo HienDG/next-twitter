@@ -1,4 +1,18 @@
 /** @type {import('tailwindcss').Config} */
+
+const plugins = require("tailwindcss/plugin");
+
+const backfaceVisibility = plugins(function ({ addUtilities }) {
+	addUtilities({
+		".backface-visible": {
+			"backface-visibility": "visible",
+		},
+		".backface-hidden": {
+			"backface-visibility": "hidden",
+		},
+	});
+});
+
 module.exports = {
 	content: [
 		"./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -27,5 +41,5 @@ module.exports = {
 		],
 	},
 
-	plugins: [require("daisyui"), require("tailwind-scrollbar-hide")],
+	plugins: [require("daisyui"), require("tailwind-scrollbar-hide"), backfaceVisibility],
 };

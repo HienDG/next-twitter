@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 
 import prisma from "@libs/prisma";
-import { catchAsyncErrors } from "@src/helper";
+import { catchAsyncErrors, isValidPrismaDocument } from "@src/helper";
 import { authOptions } from "@libs/next-auth";
 import { User } from "@prisma/client";
 
@@ -22,7 +22,7 @@ export const getLoggedInUser = async (
 		},
 	});
 
-	if (!loggedInUser) throw new Error("Not Signed In");
+	if (!isValidPrismaDocument(loggedInUser)) throw new Error("Not Signed In");
 
 	return { loggedInUser };
 };

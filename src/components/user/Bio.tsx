@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
-import { BiCalendar } from "react-icons/bi";
 import { format } from "date-fns";
+
+import { BiCalendar } from "react-icons/bi";
 
 import { Button } from "@src/components/ui";
 
@@ -11,7 +12,7 @@ interface ProfileBioProps {
 }
 
 const ProfileBio: React.FC<ProfileBioProps> = ({ userId }) => {
-	const { isFollowing, toggleFollow } = useFollow(userId);
+	const { isFollowing, toggleFollow, isLoading } = useFollow(userId);
 	const { loggedInUser } = useUser();
 	const { userInformation } = useUserInformation(userId);
 	const { onOpen } = useEditModalStore();
@@ -37,11 +38,12 @@ const ProfileBio: React.FC<ProfileBioProps> = ({ userId }) => {
 				) : (
 					<Button
 						variant="primary"
-						className="min-w-[36px] rounded-full px-4"
+						className="min-w-[100px] rounded-full px-4"
 						size="sm"
 						onClick={toggleFollow}
+						isLoading={isLoading}
 					>
-						{isFollowing ? "unFollow" : "Follow"}
+						{isLoading ? null : isFollowing ? "unFollow" : "Follow"}
 					</Button>
 				)}
 			</div>

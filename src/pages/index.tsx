@@ -8,7 +8,7 @@ interface HomeProps {}
 
 const Home: NextPage<HomeProps> = ({}) => {
 	return (
-		<div className="w-full h-full">
+		<div className="relative w-full h-full">
 			<Header label="Home" />
 			<Tweet />
 			<PostFeed />

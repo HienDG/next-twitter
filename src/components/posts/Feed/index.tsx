@@ -10,7 +10,7 @@ interface PostFeedProps {
 }
 
 const PostFeed: React.FC<PostFeedProps> = ({ userId }) => {
-	const { posts , isLoading } = usePosts(userId);
+	const { posts, isLoading } = usePosts(userId);
 
 	return (
 		<Fragment>
@@ -23,7 +23,7 @@ const PostFeed: React.FC<PostFeedProps> = ({ userId }) => {
 			) : (
 				<Fragment>
 					{posts.map((post) => (
-						<PostItem post={post} key={post.id} />
+						<PostItem post={post} key={post.id} userId={userId} />
 					))}
 				</Fragment>
 			)}

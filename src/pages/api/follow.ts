@@ -1,19 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import prisma from "@libs/prisma";
-import { catchAsyncErrors, isString } from "@src/helper";
+import { catchAsyncErrors, isString, isValidPrismaDocument } from "@src/helper";
 import { getLoggedInUser } from "./loggedInUser";
-import { User } from "@prisma/client";
-
-const isValidUser = (payload: User | null): payload is User =>
-	typeof payload === "object" && payload !== null;
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
-	if (req.method !== "POST" && req.method !== "PUT")
+	if (req.method !== "POST" && req.method !== "DELETE")
 		return res.status(405).end(`Method ${req.method} Not Allowed`);
 	let updatedFollowingIds: string[];
 
-	const { userId } = req.body;
+	const { userId } = req.query;
 
 	const { loggedInUser } = await getLoggedInUser(req, res);
 
@@ -23,11 +19,11 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 		where: { id: userId },
 	});
 
-	if (!isValidUser(user)) throw new Error("Invalid User Id");
+	if (!isValidPrismaDocument(user)) throw new Error("Invalid User Id");
 
 	updatedFollowingIds = [...(user.followingIds || [])];
 
-	if (req.method === "PUT")
+	if (req.method === "DELETE")
 		updatedFollowingIds = updatedFollowingIds.filter((followingId) => followingId !== userId);
 
 	if (req.method === "POST") updatedFollowingIds.push(userId);

@@ -18,7 +18,7 @@ const UserProfile: React.FC<UserProfileProps> = ({}) => {
 			{isLoading ? (
 				<Loader />
 			) : (
-				<div className="w-full">
+				<div className="relative w-full">
 					<Header showBackArrowIcon label={userInformation?.username as string} />
 					<Hero userId={query["id"] as string} />
 					<ProfileBio userId={query["id"] as string} />

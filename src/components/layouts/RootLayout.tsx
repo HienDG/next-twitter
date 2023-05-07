@@ -22,7 +22,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children, session }) => {
 		<SessionProvider session={session}>
 			<Meta />
 
-			<div className="min-h-screen bg-slate-900/50 scrollbar-hide">
+			<div className="min-h-screen bg-black/50 scrollbar-hide">
 				<div className="container h-full mx-auto max-w-7xl xl:px-30">{children}</div>
 			</div>
 

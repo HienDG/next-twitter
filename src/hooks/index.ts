@@ -7,3 +7,5 @@ export { default as useEditModalStore } from "./useEditModalStore";
 export { default as usePosts, type PostObject } from "./usePosts";
 export { default as useTweetModalStore } from "./useTweetModalStore";
 export { default as useFollow } from "./useFollow";
+export { default as useFetchSinglePost } from "./useFetchSinglePost";
+export { default as useLike } from "./useLike";

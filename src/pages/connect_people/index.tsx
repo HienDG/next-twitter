@@ -6,7 +6,7 @@ interface ConnectWithPeopleProps {}
 
 const ConnectWithPeople: React.FC<ConnectWithPeopleProps> = ({}) => {
 	return (
-		<div>
+		<div className="relative">
 			<Header label="Connect" showBackArrowIcon />
 		</div>
 	);

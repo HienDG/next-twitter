@@ -35,8 +35,6 @@ const TweetForm: React.FC<TweetFormProps> = ({
 	const { mutate: mutatePosts } = usePosts();
 	const { mutateSinglePost } = useFetchSinglePost(postId);
 
-
-	
 	const {
 		register,
 		formState: { isDirty, errors },
@@ -101,6 +99,7 @@ const TweetForm: React.FC<TweetFormProps> = ({
 						height={400}
 						width={400}
 						noBorder
+						isHidden
 					/>
 				) : null}
 			</Fragment>

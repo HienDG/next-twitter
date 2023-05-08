@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import prisma from "@libs/prisma";
 import { catchAsyncErrors, isString } from "@src/helper";
+import { getNumberOfUserRecords, getUser } from "@libs/collections";
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "GET") return res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -10,17 +10,13 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 
 	if (!isString(id)) throw new Error("Invalid user ID");
 
-	const existingUser = await prisma.user.findUnique({
-		where: {
-			id: id,
-		},
+	const existingUser = await getUser({
+		id: id,
 	});
 
-	const followersCount = await prisma.user.count({
-		where: {
-			followingIds: {
-				has: id,
-			},
+	const followersCount = await getNumberOfUserRecords({
+		followingIds: {
+			has: id,
 		},
 	});
 

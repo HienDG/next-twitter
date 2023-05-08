@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import prisma from "@libs/prisma";
 import { catchAsyncErrors } from "@src/helper";
 import { getLoggedInUser } from "./loggedInUser";
+import { updateUser, type UserUpdateData } from "@libs/collections";
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "PATCH") return res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -11,18 +11,9 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 
 	const { name, username, bio, coverImage, profileImage } = req.body;
 
-	const updatedUser = await prisma.user.update({
-		where: {
-			id: loggedInUser.id,
-		},
-		data: {
-			name,
-			username,
-			bio,
-			profileImage,
-			coverImage,
-		},
-	});
+	const newUserInformation: UserUpdateData = { name, username, bio, profileImage, coverImage };
+
+	const updatedUser = await updateUser(loggedInUser.id, newUserInformation);
 
 	return res.status(200).json(updatedUser);
 });

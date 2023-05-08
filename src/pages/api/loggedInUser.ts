@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
+import { User } from "@prisma/client";
 
-import prisma from "@libs/prisma";
 import { catchAsyncErrors, isValidPrismaDocument } from "@src/helper";
 import { authOptions } from "@libs/next-auth";
-import { User } from "@prisma/client";
+import { getUser } from "@libs/collections";
 
 export const getLoggedInUser = async (
 	req: NextApiRequest,
@@ -16,10 +16,8 @@ export const getLoggedInUser = async (
 
 	if (!severSession?.user.email) throw new Error("Not Signed in");
 
-	const loggedInUser = await prisma.user.findUnique({
-		where: {
-			email: severSession.user.email,
-		},
+	const loggedInUser = await getUser({
+		email: severSession.user.email,
 	});
 
 	if (!isValidPrismaDocument(loggedInUser)) throw new Error("Not Signed In");

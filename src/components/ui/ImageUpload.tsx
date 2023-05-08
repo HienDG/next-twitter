@@ -15,6 +15,7 @@ interface ImageUploadProps {
 	height?: SafeNumber;
 	width?: SafeNumber;
 	noBorder?: boolean;
+	isHidden?: boolean;
 }
 
 // eslint-disable-next-line react/display-name
@@ -28,6 +29,7 @@ const ImageUpload = forwardRef<DropzoneRef, ImageUploadProps>((props, ref) => {
 		height = "100",
 		width = "100",
 		noBorder = false,
+		isHidden,
 	} = props;
 
 	const covertFileToBase64 = useCallback(
@@ -68,7 +70,7 @@ const ImageUpload = forwardRef<DropzoneRef, ImageUploadProps>((props, ref) => {
 							className,
 							{
 								[" border-2 border-dotted border-neutral-700"]: !noBorder || selectedFileUrl,
-								["hidden"]: !selectedFileUrl,
+								["hidden"]: isHidden && !selectedFileUrl,
 							}
 						),
 					})}

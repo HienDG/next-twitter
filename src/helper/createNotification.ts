@@ -1,4 +1,5 @@
 import prisma from "@libs/prisma";
+import { updateUser } from "@libs/collections";
 
 const createNotification = async (
 	userId: string,
@@ -11,13 +12,8 @@ const createNotification = async (
 		},
 	});
 
-	await prisma.user.update({
-		where: {
-			id: userId,
-		},
-		data: {
-			hasNotification: true,
-		},
+	await updateUser(userId, {
+		hasNotification: true,
 	});
 };
 

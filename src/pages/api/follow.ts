@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import prisma from "@libs/prisma";
 import { catchAsyncErrors, isString, isValidPrismaDocument } from "@src/helper";
 import { getLoggedInUser } from "./loggedInUser";
-import { createNotification } from "./notification";
+import { createNotification } from "./notifications/[userId]";
+import { updateUser, getUser } from "@libs/collections";
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "POST" && req.method !== "DELETE")
@@ -17,8 +17,8 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 
 	if (!isString(userId)) throw new Error("Invalid User Id");
 
-	const user = await prisma.user.findUnique({
-		where: { id: userId },
+	const user = await getUser({
+		id: userId,
 	});
 
 	if (!isValidPrismaDocument(user)) throw new Error("Invalid User Id");
@@ -34,13 +34,8 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 		await createNotification(userId, "Someone followed you!");
 	}
 
-	const updatedCurrentUser = await prisma.user.update({
-		where: {
-			id: loggedInUser.id,
-		},
-		data: {
-			followingIds: [...updatedFollowingIds],
-		},
+	const updatedCurrentUser = await updateUser(loggedInUser.id, {
+		followingIds: [...updatedFollowingIds],
 	});
 
 	return res.status(200).json({ ...updatedCurrentUser });

@@ -1,13 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { User, Post } from "@prisma/client";
+import type { Post } from "@prisma/client";
 
 import prisma from "@libs/prisma";
 import { catchAsyncErrors, isString, isValidPrismaDocument } from "@src/helper";
 import { getLoggedInUser } from "./loggedInUser";
-import { createNotification } from "./notification";
+import { createNotification } from "./notifications/[userId]";
 
 const isNotificationOnYourOwnTweet = ({ userId, post }: { userId: string; post: Post }) =>
 	userId === post.userId;
+
+const createNewComment = async () => {};
+const getUserPost = async () => {};
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "POST") return res.status(405).end(`Method ${req.method} Not Allowed`);

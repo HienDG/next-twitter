@@ -4,9 +4,9 @@ import type { NextPage } from "next";
 import { Header } from "@src/components/user";
 import { Tweet, PostFeed } from "@src/components/posts";
 
-interface HomeProps {}
 
-const Home: NextPage<HomeProps> = ({}) => {
+
+const Home: NextPage = () => {
 	return (
 		<div className="relative w-full h-full">
 			<Header label="Home" />

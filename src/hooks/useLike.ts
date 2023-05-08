@@ -17,8 +17,8 @@ const useFollow = ({ userId, postId }: Payload) => {
 	const { mutate: mutateAllPosts } = usePosts(userId);
 
 	const hasLiked = useMemo(
-		() => (post?.likedIds ? [...post.likedIds].includes(postId) : false),
-		[post?.likedIds, postId]
+		() => (post?.likedIds ? [...post.likedIds].includes(loggedInUser?.id as string) : false),
+		[loggedInUser?.id, post?.likedIds]
 	);
 
 	const toggleLike = useCallback(async () => {

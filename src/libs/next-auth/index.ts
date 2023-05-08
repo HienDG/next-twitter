@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 
 import prisma from "@libs/prisma";
 import { signToken } from "@src/helper";
+import { getUser } from "@libs/collections";
 
 export const authOptions: AuthOptions = {
 	adapter: PrismaAdapter(prisma),
@@ -19,10 +20,8 @@ export const authOptions: AuthOptions = {
 			async authorize(credentials) {
 				if (!credentials?.email || !credentials?.password) throw new Error("Invalid credentials");
 
-				const user = await prisma.user.findUnique({
-					where: {
-						email: credentials.email,
-					},
+				const user = await getUser({
+					email: credentials.email,
 				});
 
 				if (!user || !user?.hashedPassword) throw new Error("Invalid credentials");

@@ -8,6 +8,9 @@ import { getUser } from "@libs/collections";
 
 export const authOptions: AuthOptions = {
 	adapter: PrismaAdapter(prisma),
+	pages: {
+		signIn: "/",
+	},
 	providers: [
 		CredentialsProvider({
 			name: "credentials",

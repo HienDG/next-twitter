@@ -10,11 +10,7 @@ interface PostFeedProps {
 }
 
 const PostFeed: React.FC<PostFeedProps> = ({ userId }) => {
-	const { posts, isLoading, error } = usePosts(userId);
-
-	console.log(posts);
-
-	console.log(error);
+	const { posts, isLoading } = usePosts(userId);
 
 	return (
 		<Fragment>

@@ -18,6 +18,8 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 
 	const getPosts = await getAllPosts();
 
+	console.log(getPosts);
+
 	return res.status(200).json(getPosts);
 });
 

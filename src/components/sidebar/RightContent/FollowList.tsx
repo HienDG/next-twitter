@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import type { User } from "@prisma/client";
 
 import { Avatar } from "@src/components/ui";
@@ -10,8 +9,6 @@ interface FollowListProps {
 }
 
 const FollowList: React.FC<FollowListProps> = ({ followers = [] }) => {
-	const { data: session } = useSession();
-
 	return (
 		<div className="flex flex-col w-full h-full max-h-[360px]">
 			<h2 className="px-6 py-4 text-xl font-semibold text-center text-white">Who to follow</h2>
@@ -37,13 +34,6 @@ const FollowList: React.FC<FollowListProps> = ({ followers = [] }) => {
 					))}
 				</Fragment>
 			</div>
-			
-			<Link
-				href={`/connect_people?userId=${session?.user.id}`}
-				className="px-6 py-4 text-blue-700 cursor-pointer hover:bg-slate-300 hover:bg-opacity-10"
-			>
-				Show more
-			</Link>
 		</div>
 	);
 };

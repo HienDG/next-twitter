@@ -1,18 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import prisma from "@libs/prisma";
 import { catchAsyncErrors, isString } from "@src/helper";
-import { updateUser, getAllNotifications, createNotification } from "@libs/collections";
-
-const getAllUserNotifications = async (userId: string) =>
-	await prisma.notification.findMany({
-		where: {
-			userId,
-		},
-		orderBy: {
-			createdAt: "desc",
-		},
-	});
+import { updateUser, getAllNotifications } from "@libs/collections";
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "GET") return res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -21,7 +10,9 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 
 	if (!isString(userId)) throw new Error("Invalid User Id");
 
-	const notifications = await getAllUserNotifications(userId);
+	const notifications = await getAllNotifications({
+		userId,
+	});
 
 	await updateUser(userId, {
 		hasNotification: false,

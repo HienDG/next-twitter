@@ -1,25 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Prisma } from "@prisma/client";
 
-import prisma from "@libs/prisma";
 import { catchAsyncErrors, isString, isValidPrismaDocument } from "@src/helper";
 import { getLoggedInUser } from "./loggedInUser";
-import { createNotification } from "./notifications/[userId]";
-
-type PostUpdateData = Prisma.PostUpdateArgs["data"];
-
-const getPost = async (postId: string) =>
-	await prisma.post.findUnique({
-		where: { id: postId },
-	});
-
-const updatePost = async (postId: string, postUpdateData: PostUpdateData) =>
-	await prisma.post.update({
-		where: {
-			id: postId,
-		},
-		data: { ...postUpdateData },
-	});
+import { getPost, updatePost, createNotification } from "@libs/collections";
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "POST" && req.method !== "DELETE")
@@ -32,7 +15,7 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 
 	if (!isString(postId)) throw new Error("Invalid post ID");
 
-	const post = await getPost(postId);
+	const post = await getPost({ id: postId });
 
 	if (!isValidPrismaDocument(post)) throw new Error("Invalid Post ID");
 
@@ -44,13 +27,16 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 	if (req.method === "POST") {
 		updatedLikedIds.push(loggedInUser.id);
 
-		if (isString(post.userId)) {
-			await createNotification(post.userId, "Someone liked your tweet!");
-		}
+		if (!isString(post.userId)) throw new Error("Invalid User Id");
+
+		await createNotification(post.userId, {
+			userId: post.userId,
+			body: "Someone liked your tweet!",
+		});
 	}
 
 	const updatedPost = await updatePost(postId, {
-		likedIds: [...updatedLikedIds],
+		likedIds: updatedLikedIds,
 	});
 
 	res.status(200).json(updatedPost);

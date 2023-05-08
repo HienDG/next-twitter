@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { catchAsyncErrors, isString, isValidPrismaDocument } from "@src/helper";
 import { getLoggedInUser } from "./loggedInUser";
-import { createNotification } from "./notifications/[userId]";
-import { updateUser, getUser } from "@libs/collections";
+
+import { updateUser, getUser, createNotification } from "@libs/collections";
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "POST" && req.method !== "DELETE")
@@ -31,7 +31,10 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 	if (req.method === "POST") {
 		updatedFollowingIds.push(userId);
 
-		await createNotification(userId, "Someone followed you!");
+		await createNotification(userId, {
+			userId,
+			body: "Someone followed you!",
+		});
 	}
 
 	const updatedCurrentUser = await updateUser(loggedInUser.id, {

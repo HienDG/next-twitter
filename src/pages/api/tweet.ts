@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import prisma from "@libs/prisma";
 import { catchAsyncErrors, isString } from "@src/helper";
 import { getLoggedInUser } from "./loggedInUser";
+import { createPost, type PostCreateData } from "@libs/collections";
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "POST") return res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -13,13 +13,13 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 
 	if (!isString(body)) throw new Error("Invalid Post Content");
 
-	const post = await prisma.post.create({
-		data: {
-			body,
-			image: image,
-			userId: loggedInUser.id,
-		},
-	});
+	const newPost: PostCreateData = {
+		body,
+		image: image,
+		userId: loggedInUser.id,
+	};
+
+	const post = await createPost(newPost);
 
 	return res.status(200).json(post);
 });

@@ -14,5 +14,20 @@ export type {
 	UserWhereUniqueInput,
 } from "./userCollections";
 
-export {} from "./postCollections";
-export {} from "./notificationCollections";
+export {
+	getAllPosts,
+	getPost,
+	createPost,
+	updatePost,
+	getPostWithLimitFields,
+} from "./postCollections";
+
+export type {
+	PostCreateData,
+	PostUniqueInput,
+	PostUpdateData,
+	PostWhereInput,
+} from "./postCollections";
+
+export { getAllNotifications, createNotification } from "./notificationCollections";
+export type { NotificationCreateInput, NotificationWhereInput } from "./notificationCollections";

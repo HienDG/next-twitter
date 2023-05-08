@@ -4,13 +4,11 @@ import type { Post } from "@prisma/client";
 import prisma from "@libs/prisma";
 import { catchAsyncErrors, isString, isValidPrismaDocument } from "@src/helper";
 import { getLoggedInUser } from "./loggedInUser";
-import { createNotification } from "./notifications/[userId]";
+
+import { getPost, createNotification } from "@libs/collections";
 
 const isNotificationOnYourOwnTweet = ({ userId, post }: { userId: string; post: Post }) =>
 	userId === post.userId;
-
-const createNewComment = async () => {};
-const getUserPost = async () => {};
 
 const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method !== "POST") return res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -30,18 +28,17 @@ const handler = catchAsyncErrors(async (req: NextApiRequest, res: NextApiRespons
 		},
 	});
 
-	const post = await prisma.post.findUnique({
-		where: {
-			id: postId,
-		},
-	});
+	const post = await getPost({ id: postId });
 
 	if (
 		isValidPrismaDocument(post) &&
 		isString(post.userId) &&
 		!isNotificationOnYourOwnTweet({ userId: loggedInUser.id, post })
 	) {
-		await createNotification(post.userId);
+		await createNotification(post.userId, {
+			userId: post.userId,
+			body: "Someone replied on your tweet!",
+		});
 	}
 
 	return res.status(200).json(comment);
